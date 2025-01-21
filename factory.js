@@ -48,42 +48,42 @@ module.exports = {
                     weight : config.REPAIRER_NUM[config.WEIGHT],
                     nowNum : repairers.length
                 },
-                // {
-                //     role : 'trosser',
-                //     needNum : config.TROSSER_NUM[config.NUMBER],
-                //     weight : config.TROSSER_NUM[config.WEIGHT],
-                //     nowNum : trossers.size
-                // },
-                // {
-                //     role : 'otherBuilder',
-                //     needNum : config.OTHERBUILDER_NUM[config.NUMBER],
-                //     weight : config.OTHERBUILDER_NUM[config.WEIGHT],
-                //     nowNum : otherBuilders.size
-                // },
+                {
+                    role : 'trosser',
+                    needNum : config.TROSSER_NUM[config.NUMBER],
+                    weight : config.TROSSER_NUM[config.WEIGHT],
+                    nowNum : trossers.size
+                },
+                {
+                    role : 'otherBuilder',
+                    needNum : config.OTHERBUILDER_NUM[config.NUMBER],
+                    weight : config.OTHERBUILDER_NUM[config.WEIGHT],
+                    nowNum : otherBuilders.size
+                },
                 {
                     role : 'cleaner',
                     needNum : config.CLEANER_NUM[config.NUMBER],
                     weight : config.CLEANER_NUM[config.WEIGHT],
                     nowNum : cleaners.size
                 },
-                // {
-                //     role : 'warriorer',
-                //     needNum : config.WARRIORER_NUM[config.NUMBER],
-                //     weight : data.roomHostileCreeps.size > 0 ? 0 : config.WARRIORER_NUM[config.WEIGHT],
-                //     nowNum : warriorers.size
-                // },
-                // {
-                //     role : 'roomBuster',
-                //     needNum : config.ROOMBUSTER_NUM[config.NUMBER],
-                //     weight : config.ROOMBUSTER_NUM[config.WEIGHT],
-                //     nowNum : roomBusters.size
-                // },
-                // {
-                //     role : 'controllerUper',
-                //     needNum : config.CONTROLLERUPER_NUM[config.NUMBER],
-                //     weight : config.CONTROLLERUPER_NUM[config.WEIGHT],
-                //     nowNum : controllerUpers.length
-                // },
+                {
+                    role : 'warriorer',
+                    needNum : config.WARRIORER_NUM[config.NUMBER],
+                    weight : data.roomHostileCreeps.size > 0 ? 0 : config.WARRIORER_NUM[config.WEIGHT],
+                    nowNum : warriorers.size
+                },
+                {
+                    role : 'roomBuster',
+                    needNum : config.ROOMBUSTER_NUM[config.NUMBER],
+                    weight : config.ROOMBUSTER_NUM[config.WEIGHT],
+                    nowNum : roomBusters.size
+                },
+                {
+                    role : 'controllerUper',
+                    needNum : config.CONTROLLERUPER_NUM[config.NUMBER],
+                    weight : config.CONTROLLERUPER_NUM[config.WEIGHT],
+                    nowNum : controllerUpers.length
+                },
                 {
                     role : 'trucker',
                     needNum : config.TRUCKER_NUM[config.NUMBER],
