@@ -3,6 +3,7 @@ const { forEach } = require("lodash");
 /**
  * 这个是交易所代码
  * 需要是就使用,不需要的时候注释掉
+ * 注意交易所无论是卖还是买都需要消耗自己的能量进行交易(消耗自己的能量作为中介费)
  */
 var structureTerminal = {
     /** @param {StructureTerminal} terminal **/
@@ -35,12 +36,10 @@ var structureTerminal = {
                 "如果想要交易请在控制台使用交易代码进行交易"
             );
         }
-        //已经获取到单价最高的订单开始交易
-        // 这个写在控制台 Game.market.deal(myOrder.id, 1000, terminal.room.name);
-
-
-
-
+        console.log(Game.market.calcTransactionCost(2000, myOrder.roomName, terminal.room.name));
+        // 已经获取到单价最高的订单开始交易
+        // var num = Game.market.deal(myOrder.id, 4, terminal.room.name);
+        // console.log(num);
 
         /************************* 买 *************************/
 
