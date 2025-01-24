@@ -2,6 +2,25 @@
  * 这是一个配置文件里面存放配置信息
  */
 const config = {
+    /** 红 */
+    RED: "<font color='red'>",
+    /** 绿 */
+    GREEN: "<font color='green'>",
+    /** 黄 */
+    YELLOW: "<font color='yellow'>",
+    /** 蓝 */
+    BLUE: "<font color='blue'>",
+    /** 紫色 */
+    MAGENTA: "<font color='magenta'>",
+    /** 青 */
+    CYAN: "<font color='cyan'>",
+    /** 白 */
+    WHITE: "<font color='white'>",
+    /** 结束 */
+    OVER : "</font>",
+    /** 换行 */
+    NEWLINE : "<br>",
+
     // 角色数量信息
     /**建筑工人数量 权重,数量,最高消耗能量,最低消耗能量  */
     BUILDER_NUM: [1, 1, 1500,300],

@@ -29,7 +29,11 @@ var roleBuilder = {
 	    }
 
 		//获取所有的建造目标
-		var targets = data.roomConstructionSites.get(creep.room.name);
+		var targets = data.roomConstructionSites.get(creep.room.name).filter(site => {
+			return site.structureType === STRUCTURE_EXTENSION ||
+				   site.structureType === STRUCTURE_SPAWN ||
+				   site.structureType === STRUCTURE_ROAD;
+		});
 		//开始建造
 	    if(targets.length > 0 && creep.memory.building) {
 			// 找到最近的目标
@@ -38,8 +42,22 @@ var roleBuilder = {
 				if(creep.build(closestTarget) == ERR_NOT_IN_RANGE) {
 					creep.moveTo(closestTarget, {visualizePathStyle: {stroke: '#ffffff'}});
 				}
+				return;
 			}
 	    }
+		else if(targets.length == 0 && creep.memory.building){
+			targets = data.roomConstructionSites.get(creep.room.name);
+			if(targets.length > 0) {
+				// 找到最近的目标
+				var closestTarget = creep.pos.findClosestByPath(targets);
+				if(closestTarget) {
+					if(creep.build(closestTarget) == ERR_NOT_IN_RANGE) {
+						creep.moveTo(closestTarget, {visualizePathStyle: {stroke: '#ffffff'}});
+					}
+					return;
+				}
+			}
+		}
 		//没有能量了，开始获取能量
 	    else if(!creep.memory.building){
 			//优先去CONTAINER中获取能量

@@ -6,6 +6,9 @@ const tools = require('./tools');
 const factory = require('./factory');
 const structureWork = require('./structureWork');
 const initFactory = require('./initFactory');
+const consoleTools = require('./console.tools');
+
+startGame ();
 
 module.exports.loop = function () {
     // 检查参数合理性   
@@ -26,4 +29,18 @@ module.exports.loop = function () {
     
     // 执行建筑的工作
     structureWork.startWork(Game);
+}
+
+/**
+ * 开始游戏的函数
+ * 该函数用于初始化游戏环境，检查参数合理性，并在控制台输出游戏开始的消息
+ * 在此处尝试使用HTML对控制台进行布局
+ * 开始游戏
+ */
+function startGame () {
+    //这里应该加载一些不会改变数据
+    console.log("开始游戏\n");
+    // var strHtml = consoleTools.consoleHtml.printHtml;
+    // console.log(strHtml);
+    consoleTools.initTools();
 }

@@ -36,13 +36,18 @@ var structureTerminal = {
                 "如果想要交易请在控制台使用交易代码进行交易"
             );
         }
-        console.log(Game.market.calcTransactionCost(2000, myOrder.roomName, terminal.room.name));
+        var cost = Game.market.calcTransactionCost(1000, myOrder.roomName, terminal.room.name);
+        console.log(cost);
+        // if(cost < 1000 && myOrder.price > 25 ){
+        //     var num = Game.market.deal(myOrder.id, 1000, terminal.room.name);
+        //     console.log(num);
+        // }
+
         // 已经获取到单价最高的订单开始交易
-        // var num = Game.market.deal(myOrder.id, 4, terminal.room.name);
+        // var num = Game.market.deal(myOrder.id, 2000, terminal.room.name);
         // console.log(num);
 
         /************************* 买 *************************/
-
     }
 
 }
