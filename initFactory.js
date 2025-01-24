@@ -16,6 +16,7 @@ var initFactory = {
         var roomBusters = new Map();
         var controllerUpers = new Map();
         var truckers = new Map();
+        var specialMineralers = new Map();
         
         var creeps = Game.creeps;
         //获取到了全部的creep
@@ -52,6 +53,9 @@ var initFactory = {
             }
             if(creep.memory.role == "trucker"){
                 truckers.set(creep.name, creep);
+            }
+            if(creep.memory.role == "specialMineraler"){
+                specialMineralers.set(creep.name, creep); 
             }
             
         });

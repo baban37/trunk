@@ -9,6 +9,7 @@ const roleWarriorer = require('role.warriorer');
 const roleRoomBuster = require('role.roomBuster');
 const roleControllerUper = require('role.controllerUper');
 const roleTrucker = require('role.trucker');
+const roleSpecialMineraler = require('role.specialMineraler');
 //各各角色开始工作
 module.exports = {
      /** @param {Game} Game **/
@@ -57,6 +58,10 @@ module.exports = {
             else if(creep.memory.role == 'trucker'){
                 roleTrucker.run(creep);
             }
+            else if(creep.memory.role == 'specialMineraler'){
+                roleSpecialMineraler.run(creep); 
+            }
+            
         }
     }
 }

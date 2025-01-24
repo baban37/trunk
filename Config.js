@@ -49,6 +49,9 @@ const config = {
     CONTROLLERUPER_NUM : [9,0,1000,1000],
     /** 大卡车 权重,数量,最高消耗能量,最低消耗能量  */
     TRUCKER_NUM : [10,2, 1000,1000],
+    /** 挖矿物的工人 权重,数量,最高消耗能量,最低消耗能量 */
+    SPECIALMINERALER_NUM : [11, 1, 2000,2000],
+
     /** 权重 */
     WEIGHT:0,
     /** 数量 */
@@ -212,6 +215,21 @@ const config = {
         {
             body : MOVE,
             weight : 5
+        },
+    ],
+    /** specialMineraler 身体比例 */
+    SPECIALMINERALER_BODY:[
+        {
+            body : WORK,
+            weight : 5
+        },
+        {
+            body : CARRY,
+            weight : 3
+        },
+        {
+            body : MOVE,
+            weight : 2
         },
     ],
 

@@ -45,19 +45,6 @@ var roleBuilder = {
 				return;
 			}
 	    }
-		else if(targets.length == 0 && creep.memory.building){
-			targets = data.roomConstructionSites.get(creep.room.name);
-			if(targets.length > 0) {
-				// 找到最近的目标
-				var closestTarget = creep.pos.findClosestByPath(targets);
-				if(closestTarget) {
-					if(creep.build(closestTarget) == ERR_NOT_IN_RANGE) {
-						creep.moveTo(closestTarget, {visualizePathStyle: {stroke: '#ffffff'}});
-					}
-					return;
-				}
-			}
-		}
 		//没有能量了，开始获取能量
 	    else if(!creep.memory.building){
 			//优先去CONTAINER中获取能量
@@ -87,6 +74,17 @@ var roleBuilder = {
 	    }
 		//当前已经没有建造目标了,先考虑做搬运工,在考虑升级
 		else {
+			targets = data.roomConstructionSites.get(creep.room.name);
+			if(targets.length > 0) {
+				// 找到最近的目标
+				var closestTarget = creep.pos.findClosestByPath(targets);
+				if(closestTarget) {
+					if(creep.build(closestTarget) == ERR_NOT_IN_RANGE) {
+						creep.moveTo(closestTarget, {visualizePathStyle: {stroke: '#ffffff'}});
+					}
+					return;
+				}
+			}
 			var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
 			// 没有搬运工了,就先搬运
 			if(harvesters.length < 1){

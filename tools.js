@@ -68,7 +68,11 @@ module.exports = {
                 costMax = config.TRUCKER_NUM[config.MAXENERGY];
                 costMix = config.TRUCKER_NUM[config.MINENERGY];
                 break;
-
+            case "specialMineraler":
+                bodyWeight = config.SPECIALMINERALER_BODY;
+                costMax = config.SPECIALMINERALER_NUM[config.MAXENERGY];
+                costMix = config.SPECIALMINERALER_NUM[config.MINENERGY];
+                break;
             default:
                 break;
         }
@@ -102,10 +106,15 @@ module.exports = {
             if(canCost <= 0 || canCost == null){
                 canCost = 1;
             }
-            if(body == WORK && canCost > 5 && role != "upgrader" && role != "builder"){
+            if(body == WORK && canCost > 5 
+            && role != "upgrader" 
+            && role != "builder"
+            && role!= "specialMineraler"
+            ){
                 canCost = 5;
             }
-            if((role == "upgrader" || role == "builder") && body == WORK && canCost > 10){
+            if((role == "upgrader" || role == "builder" || role == "specialMineraler") 
+            && body == WORK && canCost >= 10){
                 canCost = 10;
             }
             for (var j = 0; j < canCost; j++) {

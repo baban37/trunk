@@ -23,6 +23,7 @@ module.exports = {
             var controllerUpers = data.getControllerUpersByRoomName(room.name);
             var truckers = data.truckers;
             var roomTruckers = data.getTruckersByRoomName(room.name);
+            var specialMineralers = data.getSpecialMineralersByRoomName(room.name);
             let needCreeps = [
                 {
                     role : 'harvester', 
@@ -89,11 +90,27 @@ module.exports = {
                     needNum : config.TRUCKER_NUM[config.NUMBER],
                     weight : config.TRUCKER_NUM[config.WEIGHT],
                     nowNum : roomTruckers.length
+                },
+                {
+                    role : 'specialMineraler',
+                    needNum : config.SPECIALMINERALER_NUM[config.NUMBER],
+                    weight : config.SPECIALMINERALER_NUM[config.WEIGHT], 
+                    nowNum : specialMineralers.length
                 }
 
             ];
             var realNeedCreeps = [];
             forEach(needCreeps, function (needCreep) {
+                if(needCreep.role == 'specialMineraler'){
+                    var sources = room.find(FIND_MINERALS,{
+                        filter:(structure)=>{
+                            return structure.mineralAmount > 0; 
+                        }   
+                    });
+                    if(sources==0){
+                        return;
+                    }
+                }
                 if(needCreep.nowNum < needCreep.needNum){
                     realNeedCreeps.push(needCreep);
                 }

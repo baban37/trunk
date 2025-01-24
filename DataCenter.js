@@ -24,6 +24,10 @@ const DataCenter = {
     controllerUpers: new Map(),
     /** 这个是全部的搬运工 String,Creep */
     truckers: new Map(),
+    /** 这个是挖矿工人 String,Creep */
+    specialMineralers : new Map(),
+
+
     /** 每个房间内的全部建筑 String(房间名字),Structures */
     roomStructures: new Map(),
     /** 每个房间内的全部建筑工地 String(房间名字),ConstructionSites */
@@ -122,6 +126,10 @@ const DataCenter = {
     // 添加 setRoomBreakingPoints 方法
     setRoomBreakingPoints: function(roomBreakingPoints) {
         this.roomBreakingPoints = roomBreakingPoints;
+    },
+    // 添加 setSpecialMineralers 方法
+    setSpecialMineralers: function(specialMineralers) {
+        this.specialMineralers = specialMineralers;
     },
 
     /** 通过房间名字获取该房间全部的Harvesters @param {String} roomName*/
@@ -244,6 +252,18 @@ const DataCenter = {
         return Creeps;
     },
 
+    /** 通过房间名字获取该房间全部的SpecialMineralers @param {String} roomName*/
+    getSpecialMineralersByRoomName: function(roomName) {
+        var Creeps = [];
+        for (var creep of this.specialMineralers.values()) {
+            if (creep.room.name == roomName) {
+                Creeps.push(creep);
+            }
+        }  
+        return Creeps;
+    },
+
+
     getStructersByRoomNameAndStructerType: function(roomName,structerType) {
         var structers = [];
         var tempStructers = this.roomStructures.get(roomName);
@@ -255,7 +275,7 @@ const DataCenter = {
         return structers;
     },
 
-
+    
 };
 
 module.exports = DataCenter;
