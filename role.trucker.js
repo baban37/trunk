@@ -156,8 +156,10 @@ var roleTrucker = {
     GetEnergy:function(creep){
         var structures = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
-                return (structure.structureType == STRUCTURE_CONTAINER)
-                && structure.store.getUsedCapacity(RESOURCE_ENERGY) > 0;
+                return (structure.structureType == STRUCTURE_CONTAINER
+                && structure.store.getUsedCapacity(RESOURCE_ENERGY) > 0)
+                ||(structure.structureType == STRUCTURE_TERMINAL
+                && structure.store.getUsedCapacity(RESOURCE_ENERGY) > 20000);
             }
         });
         if(structures.length > 0){

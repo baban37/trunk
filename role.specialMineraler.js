@@ -39,6 +39,7 @@ var specialMineraler = {
 
     /** 运输 */
     transport: function(creep){
+       
         var room = creep.room;
         var structures = room.find(FIND_STRUCTURES, {
             filter: (structure) => {
@@ -52,8 +53,13 @@ var specialMineraler = {
         if(structure == null){
             return;
         }else{
-            if(creep.transfer(structure, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+            if(creep.transfer(structure, RESOURCE_UTRIUM) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(structure, {visualizePathStyle: {stroke: '#ffffff'}});
+                return;
+            }
+            if(creep.transfer(structure, RESOURCE_HYDROGEN) == ERR_NOT_IN_RANGE){
+                creep.moveTo(structure, {visualizePathStyle: {stroke: '#ffffff'}});
+                return;
             }
         }
     },
@@ -78,13 +84,8 @@ var specialMineraler = {
              }
          }
          else if(state == 1){
-             var usedSpace = creep.store.getUsedCapacity();
-             var sources = room.find(FIND_MINERALS,{
-                filter:(structure)=>{
-                    return structure.mineralAmount > 0; 
-                }   
-            });
-            if(usedSpace == 0 && sources.length > 0){
+            var usedSpace = creep.store.getUsedCapacity();
+            if(usedSpace == 0){
                 //当前已经没有能量了,切换状态为0开始挖矿
                 creep.memory.state = 0;
                 state = 0; 

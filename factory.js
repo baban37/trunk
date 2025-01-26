@@ -159,7 +159,7 @@ module.exports = {
                     // console.log('没有合适的Creep生成,当前房间的能量为' + energyAvailable + 'room' + room.name);
                     return;
                 }
-                var newName = realNeedCreep.role + Game.time;
+                var newName = realNeedCreep.role + room.name + Game.time;
                 console.log('开始生成' + newName + 'room' + room.name);
                 //生成Creep
                 spawn.spawnCreep(body, newName,{memory: {role: realNeedCreep.role}});
@@ -168,5 +168,37 @@ module.exports = {
         });
 
     },
+
+    run : function(){
+        var rooms = Game.rooms;
+        forEach(rooms, function (room) {
+            var spawns = room.find(FIND_MY_SPAWNS);
+            if(spawns.length == 0){
+                //当前room内没有我的spawn直接结束
+                return;
+            }
+            var harvesters = data.getHarvestersByRoomName(room.name);
+            var upgraders = data.getUpgradersByRoomName(room.name);
+            var builders = data.getBuildersByRoomName(room.name);
+            var repairers = data.getRepairersByRoomName(room.name);
+            var truckers = data.getTruckersByRoomName(room.name);
+            var specialMineralers = data.getSpecialMineralersByRoomName(room.name);
+            //获取当前房间总能量
+            var energyCapacityAvailable = room.energyCapacityAvailable;
+            //当前房间等级
+            var roomLevel = tools.getRoomLevel(room);
+            
+            var needCreep = tools.getNeedCreep(roomLevel.roles);
+            
+            if(needCreep == null){
+                //当前房间没有需要生产的Creep
+                return; 
+            }
+
+        
+        });
+    },
+
+
 
 };

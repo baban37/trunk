@@ -11,33 +11,54 @@ var structureTerminal = {
         /************************* 卖 *************************/
         //我的订单
         var myOrder = null;
-        //获取订单
-        var orders = Game.market.getAllOrders({type: ORDER_BUY, resourceType: RESOURCE_ENERGY});
-        //寻找单价最高的订单
-        forEach(orders,function(order){
-            if(myOrder == null){
-                myOrder = order;
+        var isBuy = false;//false为购买能量,true为贩卖U
+        if(isBuy){
+            var orders = Game.market.getAllOrders({type: ORDER_BUY, resourceType: RESOURCE_HYDROGEN});
+            //给orders从高到低排序
+            orders.sort(function(a,b){
+                return b.price - a.price;
+            })
+            var jyNum = 5000;
+            //找前10的订单
+            for(var i=0;i<10;i++){
+                var order = orders[i];
+                var cost = Game.market.calcTransactionCost(jyNum, order.roomName, "E51S29");
+                if(
+                    // cost < 3140
+                    order.roomName == "E31S39"
+                    ) {
+                    var num = Game.market.deal(order.id, jyNum, terminal.room.name);
+                    console.log(num);
+                    break;
+                }
+    
             }
-            if(order.price > myOrder.price){
-                myOrder = order;
-            }
-        });
-        if(myOrder == null){
-            //当前没有可以使用的订单
-            return;
         }else{
-            console.log(
-                "当前有可以交易的订单,订单内容为:\n"+
-                "订单id:"+myOrder.id+"\n"+
-                "订单价格:"+myOrder.price+"\n"+
-                "订单房间名:"+myOrder.roomName+"\n"+
-                "该订单还可以交易多少资源:"+myOrder.remainingAmount+"\n"+
-                "订单当前可用的交易量:"+myOrder.amount+"\n"+
-                "如果想要交易请在控制台使用交易代码进行交易"
-            );
+            var orders = Game.market.getAllOrders({type: ORDER_SELL, resourceType: RESOURCE_ENERGY});
+            //给orders从高到低排序
+            orders.sort(function(a,b){
+                return -b.price + a.price;
+            })
+            var jyNum = 10000;
+            //找前10的订单
+            for(var i=0;i<10;i++){
+                var order = orders[i];
+                var cost = Game.market.calcTransactionCost(jyNum, order.roomName, "E52S29");
+                if(
+                    // cost < 3140
+                    order.roomName == "E43S27"
+                    ) {
+                    var num = Game.market.deal(order.id, jyNum, terminal.room.name);
+                    console.log(num);
+                    break;
+                }
+    
+            }
         }
-        var cost = Game.market.calcTransactionCost(1000, myOrder.roomName, terminal.room.name);
-        console.log(cost);
+
+
+
+       
         // if(cost < 1000 && myOrder.price > 25 ){
         //     var num = Game.market.deal(myOrder.id, 1000, terminal.room.name);
         //     console.log(num);

@@ -158,14 +158,152 @@ module.exports = {
                 return 0;
         }
     },
-    /** 通过ControllerLevel来判断creep应该有什么样的身体组件 */
-    getBodyByControllerLevel:function(){
+    
+    getRoomLevel : function(room){
+        var roomLevel = null;
+        switch (energyCapacityAvailable) {
+            case config.ROOM_ENERGY_LEVEL_1.energy:
+                roomLevel = config.ROOM_ENERGY_LEVEL_1; 
+                break;
 
-    },
-    /** 通过优先级来判断应该获取到什么样的建筑 */
-    getStructerByWeight:function(){
+            case config.ROOM_ENERGY_LEVEL_2.energy:
+                roomLevel = config.ROOM_ENERGY_LEVEL_2;
+                break;
 
+            case config.ROOM_ENERGY_LEVEL_3.energy:
+                roomLevel = config.ROOM_ENERGY_LEVEL_3;
+                break;
+
+            case config.ROOM_ENERGY_LEVEL_4.energy:
+                roomLevel = config.ROOM_ENERGY_LEVEL_4;
+                break;
+
+            case config.ROOM_ENERGY_LEVEL_5.energy:
+                roomLevel = config.ROOM_ENERGY_LEVEL_5;
+                break;
+            
+            case config.ROOM_ENERGY_LEVEL_6.energy:
+                roomLevel = config.ROOM_ENERGY_LEVEL_6;
+                break;
+            
+            case config.ROOM_ENERGY_LEVEL_7.energy:
+                roomLevel = config.ROOM_ENERGY_LEVEL_7;
+                break;
+
+            case config.ROOM_ENERGY_LEVEL_8.energy:
+                roomLevel = config.ROOM_ENERGY_LEVEL_8;
+                break;
+
+            default:
+                //当前房间还没有升级完成还没有达到当前房间最大能量
+                break;
+        }
+
+        if(roomLevel == null){
+            var controllerLevel = room.controller.level-1;
+            switch (controllerLevel) {
+                case config.ROOM_ENERGY_LEVEL_1.level:
+                    roomLevel = config.ROOM_ENERGY_LEVEL_1;
+                    break;
+
+                case config.ROOM_ENERGY_LEVEL_2.level:
+                    roomLevel = config.ROOM_ENERGY_LEVEL_2;
+                    break;
+
+                case config.ROOM_ENERGY_LEVEL_3.level:
+                    roomLevel = config.ROOM_ENERGY_LEVEL_3;
+                    break;
+
+                case config.ROOM_ENERGY_LEVEL_4.level:
+                    roomLevel = config.ROOM_ENERGY_LEVEL_4;
+                    break;
+
+                case config.ROOM_ENERGY_LEVEL_5.level:
+                    roomLevel = config.ROOM_ENERGY_LEVEL_5;
+                    break;
+
+                case config.ROOM_ENERGY_LEVEL_6.level:
+                    roomLevel = config.ROOM_ENERGY_LEVEL_6;
+                    break;
+
+                case config.ROOM_ENERGY_LEVEL_7.level:
+                    roomLevel = config.ROOM_ENERGY_LEVEL_7;
+                    break;
+
+                case config.ROOM_ENERGY_LEVEL_8.level:
+                    roomLevel = config.ROOM_ENERGY_LEVEL_8;
+                    break;
+
+                default:
+                    console.log("当前房间等级错误");
+                    roomLevel = config.ROOM_ENERGY_LEVEL_1;
+                    break;
+            }
+        }
+        return roomLevel;
     },
+    getNeedCreep: function (roleInfos) {
+        var needCreep = null;
+        for(let i = 0; i < roleInfos.length; i++){
+            var roleInfo = roleInfos[i];
+            if(!roleInfo.parameters){
+                continue;
+            }
+            var role = roleInfo.role;
+            var needNum = roleInfo.num;
+            switch (role) {
+                case 'harvester':
+                    if(harvesters.length < needNum){
+                        needCreep = role;
+                        break;
+                    }
+                    break;
+
+                case 'upgrader':
+                    if(upgraders.length < needNum){
+                        needCreep = role;
+                        break;
+                    }
+                    break;
+
+                case 'builder':
+                    if(builders.length < needNum){
+                        needCreep = role;
+                        break;
+                    }
+                    break;
+
+                case 'repairer':
+                    if(repairers.length < needNum){
+                        needCreep = role;
+                        break;
+                    }
+                    break;
+
+                case 'trucker':
+                    if(truckers.length < needNum){
+                        needCreep = role;
+                        break;
+                    }
+                    break;
+
+                case 'specialMineraler':
+                    if(specialMineralers.length < needNum){
+                        needCreep = role;
+                        break;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+            if(needCreep != null){
+                break;
+            }
+        }
+        return needCreep;
+    }
+
     
 
 }

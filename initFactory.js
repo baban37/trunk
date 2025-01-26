@@ -71,6 +71,7 @@ var initFactory = {
         data.setRoomBusters(roomBusters);
         data.setControllerUpers(controllerUpers);
         data.setTruckers(truckers);
+        data.setSpecialMineralers(specialMineralers);
 
     },
     /** 初始化房间信息 */
