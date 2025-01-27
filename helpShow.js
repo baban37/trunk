@@ -29,7 +29,17 @@ const help = {
             "jyNum 交易量\t"+
             "isBuy 是否购买 0不卖 1卖\t " +
             "param 判断和谁交易的参数使用房间名字"
-        }
+        },
+        {
+            name : "buySomething",
+            desc : "看谁要卖东西",
+            params : "buyType 买什么类型的东西 \t" + 
+            "roomName 买的房间名\t" +
+            "jyNum 交易量\t"+
+            "isBuy 是否购买 0不买 1买\t " +
+            "param 判断和谁交易的参数使用房间名字"+
+            "nowEnergy 当前能量"
+        },
 
     ],
 
