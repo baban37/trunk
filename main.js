@@ -7,6 +7,7 @@ const factory = require('./factory');
 const structureWork = require('./structureWork');
 const initFactory = require('./initFactory');
 const consoleTools = require('./console.tools');
+const gm = require('./gmService');
 
 startGame ();
 
@@ -22,7 +23,8 @@ module.exports.loop = function () {
     initFactory.initRoom();
     
     // 根据不同情况孵化creep
-    factory.spawnCreeps(Game);
+    // factory.spawnCreeps(Game);
+    factory.run();
     
     // 执行creep的工作
     creepWork.startWork(Game);
@@ -40,7 +42,11 @@ module.exports.loop = function () {
 function startGame () {
     //这里应该加载一些不会改变数据
     console.log("开始游戏\n");
-    // var strHtml = consoleTools.consoleHtml.printHtml;
-    // console.log(strHtml);
-    consoleTools.initTools();
+    /** 注入GM */
+    Object.defineProperty(global, 'gm', {
+        value: gm,
+        writable: true, // 是否可写
+        enumerable: true, // 是否可枚举
+        configurable: true // 是否可配置
+    });
 }

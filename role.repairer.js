@@ -1,3 +1,5 @@
+const data = require("./DataCenter");
+
 var roleRepairer = {
     /** @param {Creep} creep **/
     run: function(creep) {     
@@ -44,6 +46,21 @@ var roleRepairer = {
                     return;
 				}
 			}
+            targets = creep.room.find(FIND_SOURCES, {
+                filter: (source) => {
+					return source.energy > 0;
+				}
+            });
+            if(targets.length > 0) {
+				// 找到最近的目标
+				var closestTarget = creep.pos.findClosestByPath(targets);
+				if(closestTarget) {
+					if(creep.harvest(closestTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+						creep.moveTo(closestTarget, {visualizePathStyle: {stroke: '#ffffff'}});
+					}
+                    return;
+				}
+			}
 
             var sources = creep.room.find(FIND_SOURCES);
             if(creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {
@@ -51,6 +68,27 @@ var roleRepairer = {
             }
 
         }else{
+            var isStart = data.getHarvestersByRoomName(creep.room.name).length == 0;
+            if(isStart){
+            	//当前没有harvester了,紧急情况	
+                var targets = creep.room.find(FIND_STRUCTURES, {
+                    filter: (structure) => {
+                        return (structure.structureType == STRUCTURE_EXTENSION ||
+                                structure.structureType == STRUCTURE_SPAWN ) 
+                                && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                    }
+                });
+                if(targets.length > 0) {
+                    // 找到最近的目标
+                    var closestTarget = creep.pos.findClosestByPath(targets);
+                    if(closestTarget) {
+                        if(creep.transfer(closestTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(closestTarget, {visualizePathStyle: {stroke: '#ffffff'}});
+                        }
+                    }
+                }
+            }
+        
             //这个是绑定的修复建筑
             var needRepairId = creep.memory.repairThingId;
             if(needRepairId == undefined){

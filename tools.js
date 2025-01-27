@@ -1,4 +1,5 @@
 const config = require('./Config');
+const data = require("./DataCenter");
 module.exports = {
     /** 获取当前room内所有可以用于生产的能量room.energyAvailable */
 
@@ -158,8 +159,13 @@ module.exports = {
                 return 0;
         }
     },
-    
-    getRoomLevel : function(room){
+    /**
+     * 
+     * @param {Room} room
+     * @param {*} energyCapacityAvailable
+     * @returns 
+     */
+    getRoomLevel : function(room,energyCapacityAvailable){
         var roomLevel = null;
         switch (energyCapacityAvailable) {
             case config.ROOM_ENERGY_LEVEL_1.energy:
@@ -242,11 +248,19 @@ module.exports = {
         }
         return roomLevel;
     },
-    getNeedCreep: function (roleInfos) {
+    getNeedCreep: function (roleInfos,room) {
+        var harvesters = data.getHarvestersByRoomName(room.name);
+        var upgraders = data.getUpgradersByRoomName(room.name);
+        var builders = data.getBuildersByRoomName(room.name);
+        var repairers = data.getRepairersByRoomName(room.name);
+        var truckers = data.getTruckersByRoomName(room.name);
+        var specialMineralers = data.getSpecialMineralersByRoomName(room.name);
+        var cleaners = data.getCleanersByRoomName(room.name);
         var needCreep = null;
         for(let i = 0; i < roleInfos.length; i++){
             var roleInfo = roleInfos[i];
-            if(!roleInfo.parameters){
+            if(!roleInfo.parameters
+                &&roleInfo.role != "specialMineraler"){
                 continue;
             }
             var role = roleInfo.role;
@@ -254,43 +268,60 @@ module.exports = {
             switch (role) {
                 case 'harvester':
                     if(harvesters.length < needNum){
-                        needCreep = role;
+                        needCreep = roleInfo;
                         break;
                     }
                     break;
 
                 case 'upgrader':
                     if(upgraders.length < needNum){
-                        needCreep = role;
+                        needCreep = roleInfo;
                         break;
                     }
                     break;
 
                 case 'builder':
                     if(builders.length < needNum){
-                        needCreep = role;
+                        needCreep = roleInfo;
                         break;
                     }
                     break;
 
                 case 'repairer':
                     if(repairers.length < needNum){
-                        needCreep = role;
+                        needCreep = roleInfo;
                         break;
                     }
                     break;
 
                 case 'trucker':
                     if(truckers.length < needNum){
-                        needCreep = role;
+                        needCreep = roleInfo;
                         break;
                     }
                     break;
 
                 case 'specialMineraler':
                     if(specialMineralers.length < needNum){
-                        needCreep = role;
+                        //判断是否可以
+                        var sources = room.find(FIND_MINERALS,{
+                            filter:(structure)=>{
+                                return structure.mineralAmount > 0; 
+                            }   
+                        });
+                        if(sources==0){
+                            break;
+                        }
+                        if(specialMineralers.length < needNum){
+                            needCreep = roleInfo;
+                        }
                         break;
+                    }
+                    break;
+
+                case 'cleaner':
+                    if(cleaners.length < needNum){
+                        needCreep = roleInfo;
                     }
                     break;
 

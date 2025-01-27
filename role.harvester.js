@@ -23,7 +23,8 @@ var roleHarvester = {
         }
 
         if(nowState == 0) {
-            var sources = creep.room.find(FIND_SOURCES);
+            
+            var sources = data.roomResources.get(creep.room.name);
             //creep.memory.harvester是当前harvester的资源编号
             var sourceNum = creep.memory.harvester;
             //给每一个harvester分配一个不同的source,防止卡死,注意只在第一次初始化时分配
@@ -54,6 +55,16 @@ var roleHarvester = {
                         creep.memory.harvester = 1;
                         sourceNum = 1;
                     }
+                }
+            }
+            
+            if(creep.body.length > 25 && sources[sourceNum].energy == 0){
+                if(sourceNum == 0){
+                    creep.memory.harvester = 1;
+                    sourceNum = 1;
+                }else if(sourceNum == 1){
+                    creep.memory.harvester = 0;
+                    sourceNum = 0; 
                 }
             }
             if(creep.harvest(sources[sourceNum]) == ERR_NOT_IN_RANGE) {

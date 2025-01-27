@@ -36,22 +36,14 @@ var roleCleaner = {
         }
         //清理状态
         if(state == 0){
-            var rooms = Game.rooms;
+            
             //是否已经清理了
             var isClean = false;
-            var roomValue = [];
-            var roomNum = 0;
-            forEach(rooms, function(value){
-                    roomValue[roomNum] = value;
-                    roomNum++;
-            });
-            for(var i = 0; i < roomNum; i++){
-                var room = roomValue[i];
-                isClean = this.findTrash(room, creep);
-                if(isClean){
-                    break;
-                }
-            }
+            
+            var room = creep.room;
+            isClean = this.findTrash(room, creep);
+                
+           
             // 不在去隔壁房间清理垃圾了
 
             if(!isClean){
@@ -92,7 +84,7 @@ var roleCleaner = {
     },
      /** @param {Room} room  @param {Creep} creep**/
     findTrash : function(room,creep){
-
+         
         var droppedResources = room.find(FIND_DROPPED_RESOURCES);
 
         if(droppedResources.length > 0){
@@ -100,16 +92,17 @@ var roleCleaner = {
                 creep.moveTo(new RoomPosition(25, 25, room.name),{visualizePathStyle: {stroke: '#ffaa00'}});
                 return true;
             }
+            
             // 找到垃圾了,开始清理
             var closestTarget = creep.pos.findClosestByPath(droppedResources);
-            for(const resourceType in closestTarget.store) {
-                if(creep.withdraw(closestTarget, resourceType) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(closestTarget, {visualizePathStyle: {stroke: '#ffffff'}});
-                }else{
-                    creep.memory.state = 1;
-                    return true;
-                }
+            
+            if(creep.withdraw(closestTarget, closestTarget.resourceType) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(closestTarget, {visualizePathStyle: {stroke: '#ffffff'}});
+            }else{
+                creep.memory.state = 1;
+                return true;
             }
+            
             return true;
         }   
 

@@ -275,6 +275,11 @@ const DataCenter = {
         return structers;
     },
 
+    getResourceByRoomName: function(roomName) {
+        var tempResources = this.roomResources.get(roomName);
+        return tempResources;
+    }
+
     
 };
 

@@ -177,26 +177,54 @@ module.exports = {
                 //当前room内没有我的spawn直接结束
                 return;
             }
-            var harvesters = data.getHarvestersByRoomName(room.name);
-            var upgraders = data.getUpgradersByRoomName(room.name);
-            var builders = data.getBuildersByRoomName(room.name);
-            var repairers = data.getRepairersByRoomName(room.name);
-            var truckers = data.getTruckersByRoomName(room.name);
-            var specialMineralers = data.getSpecialMineralersByRoomName(room.name);
             //获取当前房间总能量
             var energyCapacityAvailable = room.energyCapacityAvailable;
+            var energyAvailable = room.energyAvailable;
             //当前房间等级
-            var roomLevel = tools.getRoomLevel(room);
+            var roomLevel = tools.getRoomLevel(room,energyCapacityAvailable);
             
-            var needCreep = tools.getNeedCreep(roomLevel.roles);
-            
+            if(energyAvailable < roomLevel.energy){
+                //当前房间能量不足,不生产Creep
+                return;
+            }
+
+            var needCreep = tools.getNeedCreep(roomLevel.roles,room);
             if(needCreep == null){
                 //当前房间没有需要生产的Creep
                 return; 
             }
 
-        
+
+            forEach(spawns, function (spawn) {
+                if(spawn.spawning){
+                    var name = spawn.spawning.name;
+                    //获取当前正在生产的Creep
+                    spawn.room.visual.text(
+                        '正在孵化' + name,
+                        spawn.pos.x + 1, 
+                        spawn.pos.y, 
+                        {align: 'left', opacity: 0.8});
+                    //当前正在生产中,就不在判定其他Creep是否需要生产了
+                    return;
+                }
+                //开始生产Creep
+               
+                var bodyTemp = needCreep.body;
+                var bodyNum = needCreep.bodyNum;
+                var body = [];
+                for (let i = 0; i < bodyTemp.length; i++) {
+                    var bodyPart = bodyTemp[i];
+                    for (let j = 0; j < bodyNum[i]; j++) {
+                        body.push(bodyPart);
+                    }
+                }
+                //生成Creep
+                var creepName = needCreep.role + room.name + Game.time;
+                // console.log('开始生成' + creepName + 'room' + room.name);
+                spawn.spawnCreep(body, creepName,{memory: {role: needCreep.role}});
+            });
         });
+        
     },
 
 

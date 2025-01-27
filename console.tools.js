@@ -5,6 +5,7 @@ const { forEach } = require("lodash");
  * 这个是控制台使用的工具
  * 将想要在控制台使用的方法放在这里,然后就可以在控制台进行调用了
  * 现在这些都是不能变动的死方法没有办法将参数传入
+ * 废弃了
  */
 var consoleTools ={
     initTools:function(){
@@ -43,6 +44,13 @@ var consoleTools ={
                 GM:{
                     configurable: true,
                     get : sellSomething 
+                }
+            },
+            {
+                name:"sendEnergy",
+                GM:{
+                    configurable: true,
+                    get : sendEnergy
                 }
             }
         ]
@@ -89,33 +97,61 @@ function getRoomEnergy() {
     return output;
 }
 function buySomething(){
-    
-    var orders = Game.market.getAllOrders({type: ORDER_BUY, resourceType: RESOURCE_HYDROGEN});
+    var buyType = RESOURCE_HYDROGEN;
+    var roomName = "E51S29";
+    var orders = Game.market.getAllOrders({type: ORDER_BUY, resourceType: buyType});
     //给orders从高到低排序
     orders.sort(function(a,b){
         return  b.price - a.price;
     })
-    let output = "";
+    let output = "";  
     output += config.YELLOW;
     var jyNum = 9000;
-
+    output += "当前预计交易量:"+jyNum+"\n";
+    var myOrder = null;
     //找前10的订单
     for(var i=0;i<10;i++){
-        var myOrder = orders[i];
-        var cost = Game.market.calcTransactionCost(jyNum, myOrder.roomName, "E51S29");
+        if(myOrder == null){
+            myOrder = orders[0]; 
+        }
+        var order = orders[i];
+        var cost = Game.market.calcTransactionCost(jyNum, order.roomName, roomName);
         output += "--------------------------订单"+(i+1)+"--------------------------\n";
-        output += "订单物品:"+RESOURCE_HYDROGEN+"\n";
-        output += "订单id:"+myOrder.id+"\n";
-        output += "订单价格:"+myOrder.price+"\n";
-        output += "订单房间名:"+myOrder.roomName+"\n";
-        output += "该订单还可以交易多少资源:"+myOrder.remainingAmount+"\n";
-        output += "订单当前可用的交易量:"+myOrder.amount+"\n";
+        output += "订单物品:"+buyType+"\n";
+        output += "订单id:"+order.id+"\n";
+        output += "订单价格:"+order.price+"\n";
+        output += "订单房间名:"+order.roomName+"\n";
+        output += "该订单还可以交易多少资源:"+order.remainingAmount+"\n";
+        output += "订单当前可用的交易量:"+order.amount+"\n";
         output += "这单生意消耗:"+cost+"\n";
-        output += "交易量:"+jyNum+"\n";
         //计算可以获得多少利益
         var profit = jyNum * myOrder.price;
         output += "这单生意可以获得:"+profit+"\n\n\n\n";
+        if(
+            // myOrder.price < order.price
+            order.roomName == "E19S49"
+            ){
+            myOrder = order;
+        }
     }
+    output += "--------------------------最优订单--------------------------\n";
+    var cost = Game.market.calcTransactionCost(jyNum, order.roomName, roomName);
+    output += "订单物品:"+buyType+"\n";
+    output += "订单id:"+myOrder.id+"\n";
+    output += "订单价格:"+myOrder.price+"\n";
+    output += "订单房间名:"+myOrder.roomName+"\n";
+    output += "该订单还可以交易多少资源:"+myOrder.remainingAmount+"\n";
+    output += "订单当前可用的交易量:"+myOrder.amount+"\n";
+    output += "这单生意消耗:"+cost+"\n";
+    if(jyNum>myOrder.amount){
+        jyNum = myOrder.amount; 
+    }
+    //计算可以获得多少利益
+    var profit = jyNum * myOrder.price;
+    output += "这单生意可以获得:"+profit+"\n\n\n\n";
+    
+    // Game.market.deal(myOrder.id, jyNum, roomName);
+
     output += config.OVER;
    
     
@@ -129,29 +165,39 @@ function sellSomething(){
     })
     let output = "";
     output += config.YELLOW;
-    var jyNum = 10000;
-    var nowEnergy = 15658;
+    var jyNum = 40000;
+    var nowEnergy = 10614 ;
+    var myOrder = null;
+    var roomName = "E51S29";
     //找前10的订单
     for(var i=0;i<10;i++){
-        var myOrder = orders[i];
-        var cost = Game.market.calcTransactionCost(jyNum, myOrder.roomName, "E52S29");
+        var order = orders[i];
+        var cost = Game.market.calcTransactionCost(jyNum, order.roomName, "E51S29");
         output += "--------------------------订单"+(i+1)+"--------------------------\n";
         output += "订单物品:"+RESOURCE_ENERGY+"\n";
-        output += "订单id:"+myOrder.id+"\n";
-        output += "订单价格:"+myOrder.price+"\n";
-        output += "订单房间名:"+myOrder.roomName+"\n";
-        output += "该订单还可以交易多少资源:"+myOrder.remainingAmount+"\n";
-        output += "订单当前可用的交易量:"+myOrder.amount+"\n";
+        output += "订单id:"+order.id+"\n";
+        output += "订单价格:"+order.price+"\n";
+        output += "订单房间名:"+order.roomName+"\n";
+        output += "该订单还可以交易多少资源:"+order.remainingAmount+"\n";
+        output += "订单当前可用的交易量:"+order.amount+"\n";
         output += "这单生意消耗:"+cost+"\n";
         output += "交易量:"+jyNum+"\n";
-        //计算可以获得多少利益
-        var profit = nowEnergy - cost + jyNum;
-        output += "这单生意可以获得:"+profit+"\n";
-        var costCir = jyNum * myOrder.price;
+        output += "当前能量:"+nowEnergy+"\n";
+        output += "交易后能量"+(nowEnergy-cost+jyNum)+"\n";
+        var costCir = jyNum * order.price;
         output += "这单生意的价格:"+costCir+"\n\n\n\n";
+        if(
+            order.roomName == "E48S33"
+        ){
+            myOrder = order;
+        }
     }
     output += config.OVER;
+    // Game.market.deal(myOrder.id, jyNum, roomName);
     return output;
+}
+function sendEnergy(){
+       console.log("sendEnergy");
 }
 
 module.exports = consoleTools;

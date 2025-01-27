@@ -94,7 +94,7 @@ var initFactory = {
             var structures = room.find(FIND_STRUCTURES);
             var constructionSites = room.find(FIND_CONSTRUCTION_SITES);
             var hostileCreeps = room.find(FIND_HOSTILE_CREEPS);
-            var resources = room.find(FIND_DROPPED_RESOURCES);
+            var resources = room.find(FIND_SOURCES);
             if(hostileCreeps.length > 0){
                 console.log("发现敌人"+room.name+hostileCreeps[0].pos.x+","+hostileCreeps[0].pos.y);
             }

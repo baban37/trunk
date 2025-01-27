@@ -28,23 +28,98 @@ var roleBuilder = {
 	        // creep.say('建造中');
 	    }
 
-		//获取所有的建造目标
-		var targets = data.roomConstructionSites.get(creep.room.name).filter(site => {
-			return site.structureType === STRUCTURE_EXTENSION ||
-				   site.structureType === STRUCTURE_SPAWN ||
-				   site.structureType === STRUCTURE_ROAD;
-		});
-		//开始建造
-	    if(targets.length > 0 && creep.memory.building) {
-			// 找到最近的目标
-			var closestTarget = creep.pos.findClosestByPath(targets);
-			if(closestTarget) {
-				if(creep.build(closestTarget) == ERR_NOT_IN_RANGE) {
-					creep.moveTo(closestTarget, {visualizePathStyle: {stroke: '#ffffff'}});
-				}
-				return;
+		if(creep.memory.building){
+			//先看是否有harvester
+			var isHarvesters = data.getHarvestersByRoomName(creep.room.name).length > 0;
+			if(!isHarvesters){
+				//当前没有harvester了,紧急情况	
+                var targets = creep.room.find(FIND_STRUCTURES, {
+                    filter: (structure) => {
+                        return (structure.structureType == STRUCTURE_EXTENSION ||
+                                structure.structureType == STRUCTURE_SPAWN ) 
+                                && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                    }
+                });
+                if(targets.length > 0) {
+                    // 找到最近的目标
+                    var closestTarget = creep.pos.findClosestByPath(targets);
+                    if(closestTarget) {
+                        if(creep.transfer(closestTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(closestTarget, {visualizePathStyle: {stroke: '#ffffff'}});
+                        }
+                    }
+                }
+				return ;
 			}
-	    }
+
+
+			//获取所有的建造目标
+			var targets = data.roomConstructionSites.get(creep.room.name).filter(site => {
+				return site.structureType === STRUCTURE_EXTENSION ||
+					site.structureType === STRUCTURE_SPAWN ||
+					site.structureType === STRUCTURE_ROAD;
+			});
+			//开始建造
+			if(targets.length > 0) {
+				// 找到最近的目标
+				var closestTarget = creep.pos.findClosestByPath(targets);
+				if(closestTarget) {
+					if(creep.build(closestTarget) == ERR_NOT_IN_RANGE) {
+						creep.moveTo(closestTarget, {visualizePathStyle: {stroke: '#ffffff'}});
+					}
+					return;
+				}
+			}else {
+				targets = data.roomConstructionSites.get(creep.room.name);
+				if(targets.length > 0) {
+					// 找到最近的目标
+					var closestTarget = creep.pos.findClosestByPath(targets);
+					if(closestTarget) {
+						if(creep.build(closestTarget) == ERR_NOT_IN_RANGE) {
+							creep.moveTo(closestTarget, {visualizePathStyle: {stroke: '#ffffff'}});
+						}
+						return;
+					}
+				}
+				var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
+				// 没有搬运工了,就先搬运
+				if(harvesters.length < 1){
+					// 查找需要传输能量的目标结构
+					var targets = this.findEnergyTransferTargets(creep);
+					if(targets.length > 0) {
+						// 找到最近的目标
+						var closestTarget = creep.pos.findClosestByPath(targets);
+						if(closestTarget) {
+							if(creep.transfer(closestTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+								creep.moveTo(closestTarget, {visualizePathStyle: {stroke: '#ffffff'}});
+							}
+						}
+					} else {
+						// 查找需要传输能量的目标结构 注意当前存储的能量不会直接用于孵化
+						targets = creep.room.find(FIND_STRUCTURES, {
+							filter: (structure) => {
+								return (structure.structureType == STRUCTURE_CONTAINER ) 
+								&& structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+							}
+						});
+						if(targets.length > 0) {
+							// 找到最近的目标
+							var closestTarget = creep.pos.findClosestByPath(targets);
+							if(closestTarget) {
+								if(creep.transfer(closestTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+									creep.moveTo(closestTarget, {visualizePathStyle: {stroke: '#ffffff'}});
+								}
+							}
+						}
+					}
+				}
+				// 有搬运工了,就升级
+				else if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+					creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
+				}
+			}
+		}
+		
 		//没有能量了，开始获取能量
 	    else if(!creep.memory.building){
 			//优先去CONTAINER中获取能量
@@ -73,55 +148,7 @@ var roleBuilder = {
 			}
 	    }
 		//当前已经没有建造目标了,先考虑做搬运工,在考虑升级
-		else {
-			targets = data.roomConstructionSites.get(creep.room.name);
-			if(targets.length > 0) {
-				// 找到最近的目标
-				var closestTarget = creep.pos.findClosestByPath(targets);
-				if(closestTarget) {
-					if(creep.build(closestTarget) == ERR_NOT_IN_RANGE) {
-						creep.moveTo(closestTarget, {visualizePathStyle: {stroke: '#ffffff'}});
-					}
-					return;
-				}
-			}
-			var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
-			// 没有搬运工了,就先搬运
-			if(harvesters.length < 1){
-				// 查找需要传输能量的目标结构
-				var targets = this.findEnergyTransferTargets(creep);
-				if(targets.length > 0) {
-					// 找到最近的目标
-					var closestTarget = creep.pos.findClosestByPath(targets);
-					if(closestTarget) {
-						if(creep.transfer(closestTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-							creep.moveTo(closestTarget, {visualizePathStyle: {stroke: '#ffffff'}});
-						}
-					}
-				} else {
-					// 查找需要传输能量的目标结构 注意当前存储的能量不会直接用于孵化
-					targets = creep.room.find(FIND_STRUCTURES, {
-						filter: (structure) => {
-							return (structure.structureType == STRUCTURE_CONTAINER ) 
-							&& structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
-						}
-					});
-					if(targets.length > 0) {
-						// 找到最近的目标
-						var closestTarget = creep.pos.findClosestByPath(targets);
-						if(closestTarget) {
-							if(creep.transfer(closestTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-								creep.moveTo(closestTarget, {visualizePathStyle: {stroke: '#ffffff'}});
-							}
-						}
-					}
-				}
-			}
-			// 有搬运工了,就升级
-			else if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
-            }
-		}
+		
 	}
 	
 };
