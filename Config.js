@@ -651,6 +651,13 @@ ROOM_ENERGY_LEVEL_6:{
         },
         {
             parameters:true,
+            role :'trucker',
+            num : 1,
+            body : [CARRY,MOVE],
+            bodyNum : [23,23],
+        },
+        {
+            parameters:true,
             role :'upgrader',
             num : 1,
             body : [WORK,CARRY,MOVE],
@@ -659,23 +666,24 @@ ROOM_ENERGY_LEVEL_6:{
         {
             parameters:true,
             role :'builder',
-            num : 1,
+            num : 0,
             body : [WORK,CARRY,MOVE],
             bodyNum : [15,6,10],
         },
+        {
+            parameters:true,
+            role :'cleaner',
+            num : 1,
+            body : [CARRY,MOVE],
+            bodyNum : [10,20],
+        },
+        
         {
             parameters:true,
             role :'repairer',
             num : 1,
             body : [WORK,CARRY,MOVE],
             bodyNum : [15,6,10], 
-        },
-        {
-            parameters:true,
-            role :'trucker',
-            num : 1,
-            body : [CARRY,MOVE],
-            bodyNum : [23,23],
         },
         {   
             parameters:false,
@@ -698,13 +706,7 @@ ROOM_ENERGY_LEVEL_6:{
             body : [WORK,CARRY,MOVE],
             bodyNum : [15,6,10],
         },
-        {
-            parameters:true,
-            role :'cleaner',
-            num : 1,
-            body : [CARRY,MOVE],
-            bodyNum : [10,20],
-        },
+        
         {
             parameters:false,
             role :'warriorer',

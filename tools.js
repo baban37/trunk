@@ -256,6 +256,7 @@ module.exports = {
         var truckers = data.getTruckersByRoomName(room.name);
         var specialMineralers = data.getSpecialMineralersByRoomName(room.name);
         var cleaners = data.getCleanersByRoomName(room.name);
+        var constructionSites = data.roomConstructionSites.get(room.name);
         var needCreep = null;
         for(let i = 0; i < roleInfos.length; i++){
             var roleInfo = roleInfos[i];
@@ -281,6 +282,9 @@ module.exports = {
                     break;
 
                 case 'builder':
+                    if(constructionSites.length){
+                        needNum=1;
+                    }
                     if(builders.length < needNum){
                         needCreep = roleInfo;
                         break;

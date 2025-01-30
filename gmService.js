@@ -114,6 +114,7 @@ const gm = {
             output += "这单生意可以获得:"+profit+"\n\n\n\n";
             if( isSell == 1
                 &&order.roomName == param
+                &&(myOrder == null || myOrder.price > order.price)
             ){
                 myOrder = order;
             }
