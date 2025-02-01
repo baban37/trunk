@@ -116,7 +116,7 @@ const gm = {
             output += "这单生意可以获得:"+profit+"\n\n\n\n";
             if( isSell == 1
                 &&order.roomName == param
-                &&(myOrder == null || myOrder.price > order.price)
+                &&(myOrder == null || myOrder.price < order.price)
             ){
                 myOrder = order;
             }
@@ -154,7 +154,7 @@ const gm = {
      * @param {*} isBuy 是否购买 0不买 1买
      * @param {*} param 判断和谁交易的参数使用房间名字
      */
-    buySomething : function(buyType,roomName,jyNum,isBuy,param,nowEnergy){
+    buySomething : function(buyType,roomName,jyNum,isBuy,param){
         if(buyType == null || buyType == undefined){
             buyType = RESOURCE_ENERGY;
         }
@@ -170,9 +170,7 @@ const gm = {
         if(param == null || param == undefined){
             param = ""; 
         }
-        if(nowEnergy == null || nowEnergy == undefined){
-            nowEnergy = 0; 
-        }
+        var nowEnergy = Game.rooms[roomName].terminal.store.getUsedCapacity(buyType);
 
 
         var orders = Game.market.getAllOrders({type: ORDER_SELL, resourceType: buyType});
@@ -188,7 +186,7 @@ const gm = {
             var order = orders[i];
             var cost = Game.market.calcTransactionCost(jyNum, order.roomName, roomName);
             output += "--------------------------订单"+(i+1)+"--------------------------\n";
-            output += "订单物品:"+RESOURCE_ENERGY+"\n";
+            output += "订单物品:"+buyType+"\n";
             output += "订单id:"+order.id+"\n";
             output += "订单价格:"+order.price+"\n";
             output += "订单房间名:"+order.roomName+"\n";
@@ -203,6 +201,7 @@ const gm = {
             if(
                 isBuy == 1
                 && order.roomName == param
+                &&(myOrder == null || myOrder.price > order.price)
             ){
                 myOrder = order;
             }
@@ -216,7 +215,7 @@ const gm = {
             }
             var cost = Game.market.calcTransactionCost(jyNum, myOrder.roomName, roomName);
             // Game.market.deal(myOrder.id, jyNum, roomName);
-            output += "订单物品:"+RESOURCE_ENERGY+"\n";
+            output += "订单物品:"+buyType+"\n";
             output += "订单id:"+myOrder.id+"\n";
             output += "订单价格:"+myOrder.price+"\n";
             output += "订单房间名:"+myOrder.roomName+"\n";
@@ -232,6 +231,48 @@ const gm = {
         output += config.OVER;
         return output;
     },
+    /**
+     * 给其他房间发送能量
+     * @param {*} roomName1 房间名消耗能量的房间
+     * @param {*} roomName2 房间名接受能量的房间
+     * @param {*} num 能量数量
+     * @param {*} isSend 是否发送 0不发送 1发送
+     * @param {*} note 留言
+     */
+    sendEnergy:function(roomName1,roomName2,num,isSend,note){
+        if(roomName1 == null || roomName1 == undefined){
+            roomName1 = "E51S29"; 
+        }
+        if(roomName2 == null || roomName2 == undefined){
+            roomName2 = "E52S29"; 
+        }
+        if(num == null || num == undefined){
+            num = 1; 
+        }
+        if(isSend == null || isSend == undefined){
+            isSend = 0; 
+        }
+        if(note == null || note == undefined){
+            note = "hello world"; 
+        }
+        var output = "";
+        output += config.YELLOW;
+        output += "房间名:"+roomName1+"\n";
+        output += "房间名:"+roomName2+"\n";
+        output += "能量数量:"+num+"\n";
+        output += "是否发送:"+isSend+"\n";
+        output += "留言:"+note+"\n";
+
+        if(isSend == 1){
+            var state = Game.rooms[roomName1].terminal.send(RESOURCE_ENERGY, num, roomName2,note);
+            output += "发送状态:"+state+"\n";
+        }else{
+            var cost = Game.market.calcTransactionCost(num, roomName1, roomName2);
+            output += "运输费用:"+cost+"\n";
+        }
+        output += config.OVER;
+        return output;
+    }
 
 };
 module.exports = gm;

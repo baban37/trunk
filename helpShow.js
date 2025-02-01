@@ -37,10 +37,17 @@ const help = {
             "roomName 买的房间名\t" +
             "jyNum 交易量\t"+
             "isBuy 是否购买 0不买 1买\t " +
-            "param 判断和谁交易的参数使用房间名字"+
-            "nowEnergy 当前能量"
+            "param 判断和谁交易的参数使用房间名字"
         },
-
+        {
+            name : "sendEnergy",
+            desc : "给其他房间发送能量",
+            params : "roomName1 房间名消耗能量的房间\t" +
+            "roomName2 房间名接受能量的房间\t" +
+            "num 能量数量\t" +
+            "isSend 是否发送 0不发送 1发送\t" +
+            "note 留言"
+        },
     ],
 
     showAllHelp : function(page){

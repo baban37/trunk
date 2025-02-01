@@ -159,7 +159,7 @@ var roleTrucker = {
                 return (structure.structureType == STRUCTURE_CONTAINER
                 && structure.store.getUsedCapacity(RESOURCE_ENERGY) > 0)
                 ||(structure.structureType == STRUCTURE_TERMINAL
-                && structure.store.getUsedCapacity(RESOURCE_ENERGY) > 25000);
+                && structure.store.getUsedCapacity(RESOURCE_ENERGY) > 70000);
             }
         });
         if(structures.length > 0){

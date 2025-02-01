@@ -36,31 +36,58 @@ var roleCleaner = {
         }
         //清理状态
         if(state == 0){
-            
             //是否已经清理了
             var isClean = false;
-            
-            var room = creep.room;
-            isClean = this.findTrash(room, creep);
-                
-           
+            isClean = this.findTrash(creep.room, creep);
+        
             // 不在去隔壁房间清理垃圾了
-
-            if(!isClean){
+            if(!isClean
+                && creep.store.getFreeCapacity() == 0
+                ){
                 //没有垃圾了,将现在的能量全部送回去
                 creep.memory.state = 1;
                 state = 1;
             }
+            var storage = creep.room.storage;
+            if(storage != undefined && storage != null ){
+                var store = storage.store;
+                var resourceType = null;
+                for(const tempType in store) {
+                    if(tempType != RESOURCE_ENERGY){
+                        resourceType = tempType;
+                        break;
+                    }
+                }
+                if(resourceType != null){
+                    if(creep.withdraw(storage, resourceType) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(storage, {visualizePathStyle: {stroke: '#ffffff'}});
+                    } else{
+                        creep.memory.state = 1;
+                        return true;
+                    }
+                }
+            }
+           
+
         }else if(state == 1){
             //当前为返回运输状态
             
             var targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_STORAGE);//垃圾放大箱子里
+                    return (structure.structureType == STRUCTURE_TERMINAL); // 优先放入终端，如果没有终端则放入STORAGE
                 }
             });
-            
+
+            if(targets.length == 0){
+                var targets = creep.room.find(FIND_STRUCTURES, {
+                    filter: (structure) => {
+                        return (structure.structureType == STRUCTURE_STORAGE); // 优先放入终端，如果没有终端则放入STORAGE
+                    }
+                });  
+            }
+
             if(targets.length > 0) {
+
                 // 找到最近的目标
                 // if(creep.room.my){
                 //     var closestTarget = creep.pos.findClosestByPath(targets);
