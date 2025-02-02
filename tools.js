@@ -1,5 +1,6 @@
 const config = require('./Config');
 const data = require("./DataCenter");
+const consoleManager = require('./consoleManager');
 module.exports = {
     /** 获取当前room内所有可以用于生产的能量room.energyAvailable */
 
@@ -82,7 +83,7 @@ module.exports = {
             return null;
         }
         if(costMax == 0 || costMix == 0){
-            console.log("costMax == 0||costMix == 0,role = " + role+"请检查Config.js");
+            consoleManager.log("costMax == 0||costMix == 0,role = " + role+"请检查Config.js");
             return null;
         }
         if(roomEnergyAvailable < costMix){
@@ -123,7 +124,7 @@ module.exports = {
             }
         }
         if(roomEnergyAvailable < this.creatCreepCost(needBody)){
-            console.log("能量不足"+role);
+            consoleManager.log("能量不足"+role);
             return null;
         }
         return needBody;
@@ -241,7 +242,7 @@ module.exports = {
                     break;
 
                 default:
-                    console.log("当前房间等级错误");
+                    consoleManager.log("当前房间等级错误");
                     roomLevel = config.ROOM_ENERGY_LEVEL_1;
                     break;
             }

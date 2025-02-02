@@ -52,7 +52,7 @@ const help = {
 
     showAllHelp : function(page){
         if(page != undefined || page != null){
-            var maxPage = Math.ceil(this.GMCommand.length/size); 
+            var maxPage = Math.ceil(this.GMCommand.length / this.pageSize); 
             if(page > maxPage){
                 return "当前页数为:\t"+page+"\t页,最大页数为:\t"+maxPage+"\t页\n";
             }

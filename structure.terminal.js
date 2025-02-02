@@ -1,5 +1,5 @@
 const { forEach } = require("lodash");
-
+const consoleManager = require("./consoleManager");
 /**
  * 这个是交易所代码
  * 需要是就使用,不需要的时候注释掉
@@ -49,7 +49,7 @@ var structureTerminal = {
                     order.roomName == "E43S27"
                     ) {
                     var num = Game.market.deal(order.id, jyNum, terminal.room.name);
-                    console.log(num);
+                    consoleManager.log(num);
                     break;
                 }
     

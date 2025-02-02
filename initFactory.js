@@ -1,5 +1,6 @@
 const { forEach } = require("lodash");
 const data = require("./DataCenter");
+const consoleManager = require('./consoleManager');
 /** 这是一个专门用来初始化的方法 */
 var initFactory = {
     /** 初始化creep */
@@ -96,7 +97,7 @@ var initFactory = {
             var hostileCreeps = room.find(FIND_HOSTILE_CREEPS);
             var resources = room.find(FIND_SOURCES);
             if(hostileCreeps.length > 0){
-                console.log("发现敌人"+room.name+hostileCreeps[0].pos.x+","+hostileCreeps[0].pos.y);
+                consoleManager.log("发现敌人"+room.name+hostileCreeps[0].pos.x+","+hostileCreeps[0].pos.y);
             }
             const terrain = room.getTerrain();
             roomTerrain.set(room.name, terrain);

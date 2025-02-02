@@ -33,13 +33,13 @@ var roleBuilder = {
 			var isHarvesters = data.getHarvestersByRoomName(creep.room.name).length > 0;
 			if(!isHarvesters){
 				//当前没有harvester了,紧急情况	
-                var targets = creep.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return (structure.structureType == STRUCTURE_EXTENSION ||
-                                structure.structureType == STRUCTURE_SPAWN ) 
-                                && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
-                    }
-                });
+				var structures = data.roomStructures.get(creep.room.name);
+				var targets = structures.filter(structure => {
+					(structure.structureType == STRUCTURE_EXTENSION ||
+					structure.structureType == STRUCTURE_SPAWN ) 
+					&& structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+				});
+                
                 if(targets.length > 0) {
                     // 找到最近的目标
                     var closestTarget = creep.pos.findClosestByPath(targets);
@@ -95,13 +95,11 @@ var roleBuilder = {
 							}
 						}
 					} else {
-						// 查找需要传输能量的目标结构 注意当前存储的能量不会直接用于孵化
-						targets = creep.room.find(FIND_STRUCTURES, {
-							filter: (structure) => {
-								return (structure.structureType == STRUCTURE_CONTAINER ) 
-								&& structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
-							}
+						targets = data.roomStructures.get(creep.room.name).filter(structure => {
+							(structure.structureType == STRUCTURE_CONTAINER ) 
+							&& structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
 						});
+						// 查找需要传输能量的目标结构 注意当前存储的能量不会直接用于孵化
 						if(targets.length > 0) {
 							// 找到最近的目标
 							var closestTarget = creep.pos.findClosestByPath(targets);
@@ -123,13 +121,11 @@ var roleBuilder = {
 		//没有能量了，开始获取能量
 	    else if(!creep.memory.building){
 			//优先去CONTAINER中获取能量
-			targets = creep.room.find(FIND_STRUCTURES, {
-				filter: (structure) => {
-					return (structure.structureType == STRUCTURE_CONTAINER 
-						|| structure.structureType == STRUCTURE_STORAGE
-						||structure.structureType == STRUCTURE_LINK) 
-					&& structure.store.getUsedCapacity(RESOURCE_ENERGY) > 300;
-				}
+			targets = data.roomStructures.get(creep.room.name).filter(structure => {
+				(structure.structureType == STRUCTURE_CONTAINER 
+				|| structure.structureType == STRUCTURE_STORAGE
+				||structure.structureType == STRUCTURE_LINK) 
+				&& structure.store.getUsedCapacity(RESOURCE_ENERGY) > 300;
 			});
 			if(targets.length > 0) {
 				// 找到最近的目标

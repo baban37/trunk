@@ -6,7 +6,7 @@ const tools = require('./tools');
 const factory = require('./factory');
 const structureWork = require('./structureWork');
 const initFactory = require('./initFactory');
-const consoleTools = require('./console.tools');
+const consoleManager = require('./consoleManager');
 const gm = require('./gmService');
 
 startGame ();
@@ -41,7 +41,7 @@ module.exports.loop = function () {
  */
 function startGame () {
     //这里应该加载一些不会改变数据
-    console.log("开始游戏\n");
+    consoleManager.log("开始游戏\n");
     /** 注入GM */
     Object.defineProperty(global, 'gm', {
         value: gm,

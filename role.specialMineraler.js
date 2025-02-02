@@ -1,3 +1,4 @@
+const data = require('./DataCenter');
 /**
  * 这个工人一般只生产一个
  * 挖矿物的工人
@@ -39,12 +40,8 @@ var specialMineraler = {
 
     /** 运输 */
     transport: function(creep){
-       
-        var room = creep.room;
-        var structures = room.find(FIND_STRUCTURES, {
-            filter: (structure) => {
-                return structure.structureType == STRUCTURE_TERMINAL;
-            }
+        var structures = data.roomStructures.get(creep.room.name).filter(structure => {
+            structure.structureType == STRUCTURE_TERMINAL
         });
         var structure = null;
         if(structures.length > 0){

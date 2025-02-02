@@ -2,6 +2,9 @@
  * 这是一个配置文件里面存放配置信息
  */
 const config = {
+    /** 是否在控制台输出东西 */
+    ISOUTPUT: true,
+
     /** 红 */
     RED: "<font color='red'>",
     /** 绿 */

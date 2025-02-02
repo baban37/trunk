@@ -13,13 +13,11 @@ var roleRepairer = {
 	    }
  
         // 修理工的能量不足,获取能量
-        if(!creep.memory.repairering) {   
-            var targets = creep.room.find(FIND_STRUCTURES, {
-				filter: (structure) => {
-					return (structure.structureType == STRUCTURE_CONTAINER)//这个ID是冲级的container 
-					&& structure.store.getUsedCapacity(RESOURCE_ENERGY) > 300;
-				}
-			});
+        if(!creep.memory.repairering) {  
+            var targets = data.roomStructures.get(creep.room.name).filter(structure => {
+                (structure.structureType == STRUCTURE_CONTAINER)//这个ID是冲级的container 
+                && structure.store.getUsedCapacity(RESOURCE_ENERGY) > 300;
+            }) ;
 			if(targets.length > 0) {
 				// 找到最近的目标
 				var closestTarget = creep.pos.findClosestByPath(targets);
@@ -30,12 +28,10 @@ var roleRepairer = {
                     return;
 				}
 			}
-            targets = creep.room.find(FIND_STRUCTURES, {
-				filter: (structure) => {
-					return (structure.structureType == STRUCTURE_STORAGE) 
+            targets = data.roomStructures.get(creep.room.name).filter(structure => {
+                (structure.structureType == STRUCTURE_STORAGE) 
 					&& structure.store.getUsedCapacity(RESOURCE_ENERGY) > 300;
-				}
-			});
+            }) ;
 			if(targets.length > 0) {
 				// 找到最近的目标
 				var closestTarget = creep.pos.findClosestByPath(targets);
@@ -70,14 +66,12 @@ var roleRepairer = {
         }else{
             var isStart = data.getHarvestersByRoomName(creep.room.name).length == 0;
             if(isStart){
+                var targets = data.roomStructures.get(creep.room.name).filter(structure => {
+                    (structure.structureType == STRUCTURE_EXTENSION ||
+                        structure.structureType == STRUCTURE_SPAWN ) 
+                        && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                }) ;
             	//当前没有harvester了,紧急情况	
-                var targets = creep.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return (structure.structureType == STRUCTURE_EXTENSION ||
-                                structure.structureType == STRUCTURE_SPAWN ) 
-                                && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
-                    }
-                });
                 if(targets.length > 0) {
                     // 找到最近的目标
                     var closestTarget = creep.pos.findClosestByPath(targets);
@@ -106,16 +100,14 @@ var roleRepairer = {
             }
             if(needRepair == null || needRepair == undefined){
                 //当前修理工空闲
-                var targets = creep.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return (structure.structureType == STRUCTURE_EXTENSION ||
-                                structure.structureType == STRUCTURE_SPAWN 
-                                // || structure.structureType == STRUCTURE_TOWER 
-                                // || structure.structureType == STRUCTURE_CONTAINER 
-                                ) && 
-                                structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
-                    }
-                });
+                var targets = data.roomStructures.get(creep.room.name).filter(structure => {
+                    (structure.structureType == STRUCTURE_EXTENSION ||
+                        structure.structureType == STRUCTURE_SPAWN 
+                        // || structure.structureType == STRUCTURE_TOWER 
+                        // || structure.structureType == STRUCTURE_CONTAINER 
+                        ) && 
+                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                }) ;
                 if(targets.length > 0) {
                     // 找到最近的目标
                     var closestTarget = creep.pos.findClosestByPath(targets);
@@ -125,14 +117,12 @@ var roleRepairer = {
                         }
                     }
                 }else{
-                    targets = creep.room.find(FIND_STRUCTURES, {
-                        filter: (structure) => {
-                            return (structure.structureType == STRUCTURE_TOWER 
-                                    //|| structure.structureType == STRUCTURE_STORAGE
-                                ) && 
-                                    structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
-                        }
-                    });
+                    targets = data.roomStructures.get(creep.room.name).filter(structure => {
+                        (structure.structureType == STRUCTURE_TOWER 
+                            //|| structure.structureType == STRUCTURE_STORAGE
+                        ) && 
+                            structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                    }) ;
                     if(targets.length > 0){
                         var closestTarget = creep.pos.findClosestByPath(targets);
                         if(closestTarget) {
@@ -141,12 +131,10 @@ var roleRepairer = {
                             }
                         }
                     }else{
-                        targets = creep.room.find(FIND_STRUCTURES, {
-                            filter: (structure) => {
-                                return (structure.structureType == STRUCTURE_STORAGE) && 
-                                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
-                            }
-                        });
+                        targets = data.roomStructures.get(creep.room.name).filter(structure => {
+                            (structure.structureType == STRUCTURE_STORAGE) && 
+                            structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                        }) ;
                         if(targets.length > 0){
                             var closestTarget = creep.pos.findClosestByPath(targets);
                             if(closestTarget) {

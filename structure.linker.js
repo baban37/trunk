@@ -1,3 +1,4 @@
+const consoleManager = require('./consoleManager');
 var structureLink = {
     /** @param {StructureLink} link **/
    run: function(link) {
@@ -26,7 +27,7 @@ var structureLink = {
                 }
             });
             var temp  = link.transferEnergy(targets[0]);
-            console.log("temp:"+temp);
+            consoleManager.log("temp:"+temp);
         }
         
    }
