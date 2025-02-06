@@ -76,6 +76,7 @@ var roleRepairer = {
                     // 找到最近的目标
                     var closestTarget = creep.pos.findClosestByPath(targets);
                     if(closestTarget) {
+                        
                         if(creep.transfer(closestTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                             creep.moveTo(closestTarget, {visualizePathStyle: {stroke: '#ffffff'}});
                         }
@@ -109,6 +110,7 @@ var roleRepairer = {
                         structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
                 }) ;
                 if(targets.length > 0) {
+                    
                     // 找到最近的目标
                     var closestTarget = creep.pos.findClosestByPath(targets);
                     if(closestTarget) {

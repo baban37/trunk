@@ -48,6 +48,15 @@ const help = {
             "isSend 是否发送 0不发送 1发送\t" +
             "note 留言"
         },
+        {
+            name : "createMarketOrder",
+            desc : "在市场上创建一个订单",
+            params : "type 订单类型 (ORDER_SELL 或 ORDER_BUY) \t" +
+            "resourceType 资源类型\t" +
+            "price 资源的单价\t" +
+            "totalAmount 要交易的资源总量\t" +
+            "roomName 房间名称"
+        }
     ],
 
     showAllHelp : function(page){

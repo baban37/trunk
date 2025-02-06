@@ -272,7 +272,47 @@ const gm = {
         }
         output += config.OVER;
         return output;
-    }
+    },
+    /**
+     * 在市场上创建一个订单
+     * @param {string} type 订单类型（ORDER_SELL 或 ORDER_BUY）
+     * @param {string} resourceType 资源类型
+     * @param {number} price 资源的单价
+     * @param {number} totalAmount 要交易的资源总量
+     * @param {string} roomName 房间名称
+     * @returns {string} 操作结果的描述
+     */
+    createMarketOrder: function(type, resourceType, price, totalAmount, roomName) {
+        if (type !== ORDER_SELL && type !== ORDER_BUY) {
+            return "无效的订单类型，必须是 ORDER_SELL 或 ORDER_BUY";
+        }
+        if (resourceType === undefined || resourceType === null) {
+            return "资源类型不能为空";
+        }
+        if (price === undefined || price === null || isNaN(price)) {
+            return "价格必须是有效的数字";
+        }
+        if (totalAmount === undefined || totalAmount === null || isNaN(totalAmount) || totalAmount <= 0) {
+            return "交易总量必须是有效的正数";
+        }
+        if (roomName === undefined || roomName === null) {
+            return "房间名称不能为空";
+        }
+
+        var result = Game.market.createOrder({
+            type: type,
+            resourceType: resourceType,
+            price: price,
+            totalAmount: totalAmount,
+            roomName: roomName
+        });
+
+        if (result === OK) {
+            return "订单创建成功";
+        } else {
+            return "订单创建失败，错误代码: " + result;
+        }
+    },
 
 };
 module.exports = gm;

@@ -44,4 +44,8 @@
  * https://www.jianshu.com/p/4dcc255ede6b
  * 
  * http://chuangxin.fun:3000/res?username=E51S29&targetShard=shard3
+ * 
+ * 
+ * gm.createMarketOrder(ORDER_SELL,RESOURCE_HYDROGEN,300,110000,"E51S29")
+ * gm.sellSomething(RESOURCE_UTRIUM,"E52S29",10000,0,"")
  */

@@ -1,3 +1,4 @@
+const config = require("./Config");
 /**塔的代码 */
 var structureTower = {
      /** @param {StructureTower} tower **/
@@ -38,7 +39,15 @@ var structureTower = {
                 else if(
                     repairThing != null 
                     && repairThing.structureType == STRUCTURE_WALL
-                    && repairThing.hits >= 10000000
+                    && repairThing.hits >= 10*config.M
+                ){
+                    repairThingId = undefined;
+                    tower.room.memory.repairThingId = undefined;
+                }
+                else if(
+                    repairThing!= null
+                    && repairThing.structureType == STRUCTURE_RAMPART
+                    && repairThing.hits >= 10*config.M 
                 ){
                     repairThingId = undefined;
                     tower.room.memory.repairThingId = undefined;
