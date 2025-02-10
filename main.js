@@ -23,7 +23,10 @@ module.exports.loop = function () {
     initFactory.initRoom();
     
     // 根据不同情况孵化creep
+    
     // factory.spawnCreeps(Game);
+
+    // 
     factory.run();
     
     // 执行creep的工作
@@ -39,7 +42,7 @@ module.exports.loop = function () {
  * 在此处尝试使用HTML对控制台进行布局
  * 开始游戏
  */
-function startGame () {
+function startGame () {   
     //这里应该加载一些不会改变数据
     consoleManager.log("开始游戏\n");
     /** 注入GM */

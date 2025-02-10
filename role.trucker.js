@@ -85,11 +85,15 @@ var roleTrucker = {
         //给制造商能量
         var structures = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
-                return (structure.structureType == STRUCTURE_EXTENSION
+                return (
+                    ((structure.structureType == STRUCTURE_EXTENSION
                     ||structure.structureType == STRUCTURE_SPAWN
                     // ||structure.structureType == STRUCTURE_TERMINAL
                     )
-                && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0)||
+                (structure.structureType == STRUCTURE_TOWER
+                    && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 600)
+                );
             }
         });
         //最近的建筑

@@ -43,12 +43,15 @@ var specialMineraler = {
         //找到terminal
         var structures = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
-                return (structure.structureType == STRUCTURE_TERMINAL);
+                return (structure.structureType == STRUCTURE_TERMINAL
+                    || (structure.structureType == STRUCTURE_CONTAINER
+                        && structure.store.getFreeCapacity() > 0)
+                        );
             }
         });
         var structure = null;
         if(structures.length > 0){
-            structure = structures[0];
+            var structure = creep.pos.findClosestByPath(structures);
         }
        
         if(structure == null){

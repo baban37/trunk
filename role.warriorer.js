@@ -45,10 +45,10 @@ var roleWarriorer = {
             //开启攻击状态
             //先看看有没有敌人
 
-            if(creep.room.name != "E51S29"){
-                creep.moveTo(new RoomPosition(25, 25, "E51S29"),{visualizePathStyle: {stroke: '#ffaa00'}});
-                return;
-            }
+            // if(creep.room.name != "E51S29"){
+            //     creep.moveTo(new RoomPosition(25, 25, "E51S29"),{visualizePathStyle: {stroke: '#ffaa00'}});
+            //     return;
+            // }
 
             var enemies = creep.room.find(FIND_HOSTILE_CREEPS);
             if(enemies.length > 0){

@@ -258,11 +258,14 @@ module.exports = {
         var specialMineralers = data.getSpecialMineralersByRoomName(room.name);
         var cleaners = data.getCleanersByRoomName(room.name);
         var constructionSites = data.roomConstructionSites.get(room.name);
+        var warriorers = data.getWarriorersByRoomName(room.name);
+
         var needCreep = null;
         for(let i = 0; i < roleInfos.length; i++){
             var roleInfo = roleInfos[i];
             if(!roleInfo.parameters
-                &&roleInfo.role != "specialMineraler"){
+                &&roleInfo.role != "specialMineraler"
+                &&roleInfo.role!= "warriorer"){
                 continue;
             }
             var role = roleInfo.role;
@@ -326,6 +329,13 @@ module.exports = {
 
                 case 'cleaner':
                     if(cleaners.length < needNum){
+                        needCreep = roleInfo;
+                    }
+                    break;
+
+                case 'warriorer':
+                    if(warriorers.length < needNum 
+                    && data.roomHostileCreeps.get(room.name).length > 0){
                         needCreep = roleInfo;
                     }
                     break;

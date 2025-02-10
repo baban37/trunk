@@ -6,6 +6,9 @@ module.exports = {
     spawnCreeps : function() {
         var rooms = Game.rooms;
         forEach(rooms, function (room) {
+            if(room.name != "E52S29"){
+                return ;
+            }
             var spawns = room.find(FIND_MY_SPAWNS);
             if(spawns.length == 0){
                 //当前room内没有我的spawn直接结束
@@ -31,72 +34,72 @@ module.exports = {
                     weight : config.HARVESTER_NUM[config.WEIGHT],
                     nowNum : harvesters.length
                 },
-                {
-                    role : 'upgrader',
-                    needNum : config.UPGRADER_NUM[config.NUMBER],
-                    weight : config.UPGRADER_NUM[config.WEIGHT],
-                    nowNum : upgraders.length
-                },
-                {
-                    role : 'builder',
-                    needNum : config.BUILDER_NUM[config.NUMBER],
-                    weight : config.BUILDER_NUM[config.WEIGHT],
-                    nowNum : builders.length
-                },
-                {
-                    role : 'repairer',
-                    needNum : config.REPAIRER_NUM[config.NUMBER],
-                    weight : config.REPAIRER_NUM[config.WEIGHT],
-                    nowNum : repairers.length
-                },
-                {
-                    role : 'trosser',
-                    needNum : config.TROSSER_NUM[config.NUMBER],
-                    weight : config.TROSSER_NUM[config.WEIGHT],
-                    nowNum : trossers.size
-                },
-                {
-                    role : 'otherBuilder',
-                    needNum : config.OTHERBUILDER_NUM[config.NUMBER],
-                    weight : config.OTHERBUILDER_NUM[config.WEIGHT],
-                    nowNum : otherBuilders.size
-                },
-                {
-                    role : 'cleaner',
-                    needNum : config.CLEANER_NUM[config.NUMBER],
-                    weight : config.CLEANER_NUM[config.WEIGHT],
-                    nowNum : cleaners.size
-                },
-                {
-                    role : 'warriorer',
-                    needNum : config.WARRIORER_NUM[config.NUMBER],
-                    weight : data.roomHostileCreeps.size > 0 ? 0 : config.WARRIORER_NUM[config.WEIGHT],
-                    nowNum : warriorers.size
-                },
-                {
-                    role : 'roomBuster',
-                    needNum : config.ROOMBUSTER_NUM[config.NUMBER],
-                    weight : config.ROOMBUSTER_NUM[config.WEIGHT],
-                    nowNum : roomBusters.size
-                },
-                {
-                    role : 'controllerUper',
-                    needNum : config.CONTROLLERUPER_NUM[config.NUMBER],
-                    weight : config.CONTROLLERUPER_NUM[config.WEIGHT],
-                    nowNum : controllerUpers.length
-                },
+                // {
+                //     role : 'upgrader',
+                //     needNum : config.UPGRADER_NUM[config.NUMBER],
+                //     weight : config.UPGRADER_NUM[config.WEIGHT],
+                //     nowNum : upgraders.length
+                // },
+                // {
+                //     role : 'builder',
+                //     needNum : config.BUILDER_NUM[config.NUMBER],
+                //     weight : config.BUILDER_NUM[config.WEIGHT],
+                //     nowNum : builders.length
+                // },
+                // {
+                //     role : 'repairer',
+                //     needNum : config.REPAIRER_NUM[config.NUMBER],
+                //     weight : config.REPAIRER_NUM[config.WEIGHT],
+                //     nowNum : repairers.length
+                // },
+                // {
+                //     role : 'trosser',
+                //     needNum : config.TROSSER_NUM[config.NUMBER],
+                //     weight : config.TROSSER_NUM[config.WEIGHT],
+                //     nowNum : trossers.size
+                // },
+                // {
+                //     role : 'otherBuilder',
+                //     needNum : config.OTHERBUILDER_NUM[config.NUMBER],
+                //     weight : config.OTHERBUILDER_NUM[config.WEIGHT],
+                //     nowNum : otherBuilders.size
+                // },
+                // {
+                //     role : 'cleaner',
+                //     needNum : config.CLEANER_NUM[config.NUMBER],
+                //     weight : config.CLEANER_NUM[config.WEIGHT],
+                //     nowNum : cleaners.size
+                // },
+                // {
+                //     role : 'warriorer',
+                //     needNum : config.WARRIORER_NUM[config.NUMBER],
+                //     weight : data.roomHostileCreeps.size > 0 ? 0 : config.WARRIORER_NUM[config.WEIGHT],
+                //     nowNum : warriorers.size
+                // },
+                // {
+                //     role : 'roomBuster',
+                //     needNum : config.ROOMBUSTER_NUM[config.NUMBER],
+                //     weight : config.ROOMBUSTER_NUM[config.WEIGHT],
+                //     nowNum : roomBusters.size
+                // },
+                // {
+                //     role : 'controllerUper',
+                //     needNum : config.CONTROLLERUPER_NUM[config.NUMBER],
+                //     weight : config.CONTROLLERUPER_NUM[config.WEIGHT],
+                //     nowNum : controllerUpers.length
+                // },
                 {
                     role : 'trucker',
                     needNum : config.TRUCKER_NUM[config.NUMBER],
                     weight : config.TRUCKER_NUM[config.WEIGHT],
                     nowNum : roomTruckers.length
                 },
-                {
-                    role : 'specialMineraler',
-                    needNum : config.SPECIALMINERALER_NUM[config.NUMBER],
-                    weight : config.SPECIALMINERALER_NUM[config.WEIGHT], 
-                    nowNum : specialMineralers.length
-                }
+                // {
+                //     role : 'specialMineraler',
+                //     needNum : config.SPECIALMINERALER_NUM[config.NUMBER],
+                //     weight : config.SPECIALMINERALER_NUM[config.WEIGHT], 
+                //     nowNum : specialMineralers.length
+                // }
 
             ];
             var realNeedCreeps = [];
@@ -182,11 +185,6 @@ module.exports = {
             var energyAvailable = room.energyAvailable;
             //当前房间等级
             var roomLevel = tools.getRoomLevel(room,energyCapacityAvailable);
-            
-            if(energyAvailable < roomLevel.energy){
-                //当前房间能量不足,不生产Creep
-                return;
-            }
 
             var needCreep = tools.getNeedCreep(roomLevel.roles,room);
             if(needCreep == null){

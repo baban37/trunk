@@ -30,8 +30,8 @@ var roleBuilder = {
 
 		if(creep.memory.building){
 			//先看是否有harvester
-			var isHarvesters = data.getHarvestersByRoomName(creep.room.name).length > 0;
-			if(!isHarvesters){
+			var isHarvesters = data.getHarvestersByRoomName(creep.room.name).length < 1;
+			if( isHarvesters){
 				//当前没有harvester了,紧急情况	
 				var structures = data.roomStructures.get(creep.room.name);
 				var targets = structures.filter(structure => {
@@ -57,7 +57,8 @@ var roleBuilder = {
 			var targets = data.roomConstructionSites.get(creep.room.name).filter(site => {
 				return site.structureType === STRUCTURE_EXTENSION ||
 					site.structureType === STRUCTURE_SPAWN ||
-					site.structureType === STRUCTURE_ROAD;
+					site.structureType === STRUCTURE_ROAD||
+					site.structureType == STRUCTURE_CONTAINER;
 			});
 			//开始建造
 			if(targets.length > 0) {
@@ -120,6 +121,7 @@ var roleBuilder = {
 		
 		//没有能量了，开始获取能量
 	    else if(!creep.memory.building){
+			
 			//优先去CONTAINER中获取能量
 			targets = data.roomStructures.get(creep.room.name).filter(structure => {
 				(structure.structureType == STRUCTURE_CONTAINER 
@@ -127,6 +129,7 @@ var roleBuilder = {
 				||structure.structureType == STRUCTURE_LINK) 
 				&& structure.store.getUsedCapacity(RESOURCE_ENERGY) > 300;
 			});
+			console.log(data.roomStructures.get(creep.room.name));
 			if(targets.length > 0) {
 				// 找到最近的目标
 				var closestTarget = creep.pos.findClosestByPath(targets);
@@ -134,6 +137,7 @@ var roleBuilder = {
 					if(creep.withdraw(closestTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
 						creep.moveTo(closestTarget, {visualizePathStyle: {stroke: '#ffffff'}});
 					}
+					return;
 				}
 			}
 			else{

@@ -59,6 +59,7 @@ var roleHarvester = {
             }
             
             if(creep.body.length > 25 && sources[sourceNum].energy == 0){
+                creep.memory.nowState = 1;
                 if(sourceNum == 0){
                     creep.memory.harvester = 1;
                     sourceNum = 1;
@@ -66,6 +67,10 @@ var roleHarvester = {
                     creep.memory.harvester = 0;
                     sourceNum = 0; 
                 }
+            }
+            if(sources[0].energy == 0 && sources[1].energy == 0){
+                creep.memory.nowState = 1;
+                return ;
             }
             if(creep.harvest(sources[sourceNum]) == ERR_NOT_IN_RANGE) {
                 //前往并绘制路径
@@ -113,11 +118,13 @@ var roleHarvester = {
             return creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (
-                        // structure.structureType == STRUCTURE_CONTAINER 
+                            // structure.structureType == STRUCTURE_CONTAINER 
                             structure.structureType == STRUCTURE_EXTENSION 
-                            || structure.structureType == STRUCTURE_SPAWN 
+                            || structure.structureType == STRUCTURE_SPAWN
+                            // || structure.structureType == STRUCTURE_TERMINAL
                             // || structure.structureType == STRUCTURE_TOWER 
                             // || structure.structureType == STRUCTURE_CONTAINER 
+                            
                             ) && 
                             structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
                 }
@@ -129,10 +136,11 @@ var roleHarvester = {
             filter: (structure) => {
                 return (
                     structure.structureType == STRUCTURE_CONTAINER 
-                        // structure.structureType == STRUCTURE_EXTENSION 
-                        // || structure.structureType == STRUCTURE_SPAWN 
+                        || structure.structureType == STRUCTURE_EXTENSION 
+                        || structure.structureType == STRUCTURE_SPAWN 
                         // || structure.structureType == STRUCTURE_TOWER 
                         // || structure.structureType == STRUCTURE_CONTAINER 
+                        || structure.structureType == STRUCTURE_STORAGE
                         ) && 
                         structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
             }

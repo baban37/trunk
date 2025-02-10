@@ -48,4 +48,7 @@
  * 
  * gm.createMarketOrder(ORDER_SELL,RESOURCE_HYDROGEN,300,110000,"E51S29")
  * gm.sellSomething(RESOURCE_UTRIUM,"E52S29",10000,0,"")
+ * Game.spawns['Spawn1'].spawnCreep([ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], "warriorerLS",{memory: {role: "warriorer"}});
+ * Game.spawns['Spawn1'].spawnCreep([CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], "cleanerLS",{memory: {role: "cleaner"}});
+ * Game.spawns['Spawn1'].spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY], "harvesterLs",{memory: {role: "harvester"}});
  */

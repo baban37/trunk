@@ -14,6 +14,7 @@ var roleCleaner = {
         else if(state == 0){
             var freeSpace = creep.store.getFreeCapacity(RESOURCE_ENERGY);
             if(freeSpace == 0){
+               
                 //当前已经没有空间清理了,切换状态为1
                 creep.memory.state = 1;
                 state = 1;
@@ -39,7 +40,10 @@ var roleCleaner = {
             //是否已经清理了
             var isClean = false;
             isClean = this.findTrash(creep.room, creep);
-        
+            if(isClean){
+                return;
+            }
+
             // 不在去隔壁房间清理垃圾了
             if(!isClean
                 && creep.store.getFreeCapacity() == 0
@@ -48,25 +52,40 @@ var roleCleaner = {
                 creep.memory.state = 1;
                 state = 1;
             }
-            var storage = creep.room.storage;
-            if(storage != undefined && storage != null ){
-                var store = storage.store;
-                var resourceType = null;
-                for(const tempType in store) {
-                    if(tempType != RESOURCE_ENERGY){
-                        resourceType = tempType;
-                        break;
-                    }
+            
+            var targets = creep.room.find(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return ((structure.structureType == STRUCTURE_CONTAINER
+                            || structure.structureType == STRUCTURE_STORAGE)
+                        && ((structure.store.getUsedCapacity(RESOURCE_HYDROGEN) > 0)
+                            || (structure.store.getUsedCapacity(RESOURCE_UTRIUM) > 0))
+                        
+                        ); 
+
                 }
-                if(resourceType != null){
-                    if(creep.withdraw(storage, resourceType) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(storage, {visualizePathStyle: {stroke: '#ffffff'}});
+            });
+            if(targets.length > 0) {
+                // 找到最近的目标
+                var closestTarget = creep.pos.findClosestByPath(targets);
+                if(creep.room.name == "E51S29"){
+                    if(creep.withdraw(closestTarget, RESOURCE_HYDROGEN) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(closestTarget, {visualizePathStyle: {stroke: '#ffffff'}});
+                    } else{
+                        creep.memory.state = 1;
+                        return true;
+                    }
+                }else{
+                    if(creep.withdraw(closestTarget, RESOURCE_UTRIUM) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(closestTarget, {visualizePathStyle: {stroke: '#ffffff'}});
                     } else{
                         creep.memory.state = 1;
                         return true;
                     }
                 }
+                
             }
+                
+            
            
 
         }else if(state == 1){
@@ -123,7 +142,7 @@ var roleCleaner = {
             // 找到垃圾了,开始清理
             var closestTarget = creep.pos.findClosestByPath(droppedResources);
             
-            if(creep.withdraw(closestTarget, closestTarget.resourceType) == ERR_NOT_IN_RANGE) {
+            if(creep.pickup(closestTarget) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(closestTarget, {visualizePathStyle: {stroke: '#ffffff'}});
             }else{
                 creep.memory.state = 1;
