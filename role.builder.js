@@ -23,7 +23,7 @@ var roleBuilder = {
             creep.memory.building = false;
             // creep.say('开始获取能量');
 	    }
-	    if(!creep.memory.building && creep.store.getFreeCapacity() == 0) {
+	    if(!creep.memory.building && creep.store[RESOURCE_ENERGY] == creep.store.getCapacity()) {
 	        creep.memory.building = true;
 	        // creep.say('建造中');
 	    }
@@ -117,19 +117,22 @@ var roleBuilder = {
 					creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
 				}
 			}
+			console.log(2);
 		}
 		
 		//没有能量了，开始获取能量
 	    else if(!creep.memory.building){
-			
 			//优先去CONTAINER中获取能量
 			targets = data.roomStructures.get(creep.room.name).filter(structure => {
-				(structure.structureType == STRUCTURE_CONTAINER 
-				|| structure.structureType == STRUCTURE_STORAGE
-				||structure.structureType == STRUCTURE_LINK) 
-				&& structure.store.getUsedCapacity(RESOURCE_ENERGY) > 300;
+				return ((structure.structureType == STRUCTURE_CONTAINER 
+				&& structure.store.getUsedCapacity(RESOURCE_ENERGY) > 300)
+				|| (structure.structureType == STRUCTURE_STORAGE
+				&& structure.store.getUsedCapacity(RESOURCE_ENERGY) > 300)
+				||(structure.structureType == STRUCTURE_LINK 
+				&& structure.store.getUsedCapacity(RESOURCE_ENERGY) > 300)
+				);
 			});
-			console.log(data.roomStructures.get(creep.room.name));
+			
 			if(targets.length > 0) {
 				// 找到最近的目标
 				var closestTarget = creep.pos.findClosestByPath(targets);
@@ -137,8 +140,9 @@ var roleBuilder = {
 					if(creep.withdraw(closestTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
 						creep.moveTo(closestTarget, {visualizePathStyle: {stroke: '#ffffff'}});
 					}
-					return;
+					creep.memory.building = true;
 				}
+				return;
 			}
 			else{
 				var sources = creep.room.find(FIND_SOURCES,{

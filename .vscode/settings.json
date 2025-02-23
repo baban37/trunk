@@ -1,4 +1,8 @@
 {
     "editor.fontSize": 30,
-    "marscode.chatLanguage": "cn"
+    "marscode.chatLanguage": "cn",
+    "marscode.codeCompletionPro": {
+        "enableCodeCompletionPro": true
+    },
+    "marscode.enableInlineCommand": true
 }
